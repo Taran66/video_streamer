@@ -1,12 +1,5 @@
-function pizzaReady(callback){
-    setTimeout(() => {
-        const pizza = `🍕`
-        callback(pizza)
-    }, 2000);
-}
+const express = require('express')
+const app = express()
 
-function eatPizza(pizza){
-    console.log(`eat the ${pizza}`)
-}
 
-pizzaReady(eatPizza)
+console.log(express)
