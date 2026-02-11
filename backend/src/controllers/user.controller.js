@@ -16,8 +16,7 @@ const registerUser = asyncHandler( async (req, res) => {
     // return res
 
     const {fullName, email, username, password } = req.body
-    console.log("email: ", email);
-    // console.log(req.body)
+    // console.log("email: ", email);
 
     // if (fullName === ""){
     //     throw new ApiError(400, "fullname is required")
@@ -32,7 +31,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //Checking if the user is already registered or not.
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{username}, {email}]
     })
 
@@ -42,10 +41,17 @@ const registerUser = asyncHandler( async (req, res) => {
 
     // getting the localpath from the middleware .files method
 
+    // console.log(req.files)
+
     const avatarLocalPath = req.files?.avatar[0]?.path;
 
-    const coverImageLocalPath = req.files?.coverImage[0]?.coverImage[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
+    let coverImageLocalPath;
+
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
     // avatar image is required
     
     if(!avatarLocalPath) {
@@ -64,7 +70,9 @@ const registerUser = asyncHandler( async (req, res) => {
         fullName,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
-        username: username.toLowerCae()
+        email,
+        password,
+        username: username.toLowerCase()
     })
 
     const createdUser = await User.findById(user._id).select(
