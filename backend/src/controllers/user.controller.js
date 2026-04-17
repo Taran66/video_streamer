@@ -15,7 +15,7 @@ const generateAccessAndRefreshTokens = async(userId) => {
         const refreshToken = user.generateRefreshToken()
 
         user.refreshToken = refreshToken
-        await user.save({validateBeforeSave: false})
+        await user.save({ validateBeforeSave: false })
 
         return {accessToken, refreshToken}
 
@@ -153,8 +153,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     return res
     .status(200)
-    .cookie("accessToken", options)
-    .cookie("refreshToken", options)
+    .cookie("accessToken",accessToken, options)
+    .cookie("refreshToken",refreshToken, options)
     .json(
         new ApiResponse(
             200,
